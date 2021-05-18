@@ -1,0 +1,39 @@
+const puppeteer = require("puppeteer");
+const fs = require("fs");
+
+(async () => {
+    try {
+      // Initialize Puppeteer
+    const browser = await puppeteer.launch();
+    const page = await browser.newPage();
+
+    // Specify comic issue page url
+    await page.goto(
+    "https://comicpunch.net/readme/index.php?title=amazing-spider-man-2018&chapter=1"
+    );
+    console.log("page has been loaded!");
+
+    await page.click("button.button4");
+    console.log("'Full Chapter' button has been clicked!");
+
+    // Here, we convert the Nodelist of images returned from the DOM into an array, then map each item and get the src attribute value, 
+    //and store it in 'src' variable, which is therefore returned to be the value of 'issueSrcs' variable.
+    const issueSrcs = await page.evaluate(() => {
+        const srcs = Array.from(
+          document.querySelectorAll(".comicpic")
+        ).map((image) => image.getAttribute("src"));
+        return srcs;
+  });
+  console.log("Page has been evaluated!");
+
+    // Persist data into data.json file
+    fs.writeFileSync("./data.json", JSON.stringify(issueSrcs));
+    console.log("File is created!");
+
+    // End Puppeteer
+    await browser.close();
+
+    } catch (error) {
+      console.log(error);
+    }
+  })();
