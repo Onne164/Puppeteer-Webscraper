@@ -9,6 +9,10 @@ const fs = require("fs");
     const browser = await puppeteer.launch();
     const page = await browser.newPage();
 
+    //sleep for 3 seconds
+    const sleep = duration => new Promise(resolve => setTimeout(resolve, duration));
+    await sleep(3000);
+
     // Specify comic issue page url
     await page.goto(
       "https://comicpunch.net/readme/index.php?title=amazing-spider-man-2018&chapter=1"
@@ -16,7 +20,7 @@ const fs = require("fs");
     console.log("Page has been loaded!");
 
     await page.click("button.button4");
-    
+
     console.log("'Full Chapter' button has been clicked!");
 
     /*  Convert the Nodelist of images returned from the DOM into an array, then map each item and get the src attribute value,
@@ -29,7 +33,7 @@ const fs = require("fs");
     });
 
     console.log("Page has been evaluated!");
-    //console.log(imgURLs);
+    console.log(imgURLs);
 
     // Persist data into data.json file
     fs.writeFileSync("./data/data.json", JSON.stringify(imgURLs));
