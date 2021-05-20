@@ -11,15 +11,16 @@ const fs = require("fs");
 
     // Specify comic issue page url
     await page.goto(
-      "https://comicpunch.net/readme/index.php?title=amazing-spider-man-2018&chapter=1",
-      {waitUntil: 'networkidle0'}
+      "https://comicpunch.net/readme/index.php?title=amazing-spider-man-2018&chapter=1"
     );
     console.log("Page has been loaded!");
+
     await page.click("button.button4");
+    
     console.log("'Full Chapter' button has been clicked!");
 
-    //  Convert the Nodelist of images returned from the DOM into an array, then map each item and get the src attribute value,
-    // //and store it in 'src' variable, which is therefore returned to be the value of 'imgURLs' variable.
+    /*  Convert the Nodelist of images returned from the DOM into an array, then map each item and get the src attribute value,
+    and store it in 'src' variable, which is therefore returned to be the value of 'imgURLs' variable.*/
     const imgURLs = await page.evaluate(() => {
       const srcs = Array.from(
         document.querySelectorAll(".comicpic")
@@ -28,7 +29,7 @@ const fs = require("fs");
     });
 
     console.log("Page has been evaluated!");
-    console.log(imgURLs);
+    //console.log(imgURLs);
 
     // Persist data into data.json file
     fs.writeFileSync("./data/data.json", JSON.stringify(imgURLs));
@@ -37,7 +38,7 @@ const fs = require("fs");
     // End Puppeteer
     await browser.close();
     
-    // images download to an empty folder
+    // images download to the images folder
     imgURLs.forEach((imgURL, i) => {
       https.get(imgURL, (response) => {
         response.pipe(fs.createWriteStream('images/'+ `${i++}.${imgURL.slice(-3)}`));
