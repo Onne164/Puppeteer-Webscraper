@@ -1,6 +1,6 @@
 // require puppeteer, https and fs
 const puppeteer = require("puppeteer");
-const https = require('https');
+const https = require("https");
 const fs = require("fs");
 
 (async () => {
@@ -10,7 +10,8 @@ const fs = require("fs");
     const page = await browser.newPage();
 
     //sleep for 3 seconds
-    const sleep = duration => new Promise(resolve => setTimeout(resolve, duration));
+    const sleep = (duration) =>
+      new Promise((resolve) => setTimeout(resolve, duration));
     await sleep(3000);
 
     // Specify comic issue page url
@@ -20,7 +21,6 @@ const fs = require("fs");
     console.log("Page has been loaded!");
 
     await page.click("button.button4");
-
     console.log("'Full Chapter' button has been clicked!");
 
     /*  Convert the Nodelist of images returned from the DOM into an array, then map each item and get the src attribute value,
@@ -33,6 +33,7 @@ const fs = require("fs");
     });
 
     console.log("Page has been evaluated!");
+    console.log("This comics contains " + imgURLs.length + " images:");
     console.log(imgURLs);
 
     // Persist data into data.json file
@@ -41,11 +42,13 @@ const fs = require("fs");
 
     // End Puppeteer
     await browser.close();
-    
+
     // images download to the images folder
     imgURLs.forEach((imgURL, i) => {
       https.get(imgURL, (response) => {
-        response.pipe(fs.createWriteStream('images/'+ `${i++}.${imgURL.slice(-3)}`));
+        response.pipe(
+          fs.createWriteStream("images/" + `${i++}.${imgURL.slice(-3)}`)
+        );
       });
     });
   } catch (error) {
