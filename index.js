@@ -40,7 +40,7 @@ const fs = require("fs");
     // images download to an empty folder
     imgURLs.forEach((imgURL, i) => {
       https.get(imgURL, (response) => {
-        response.pipe(fs.createWriteStream(`${i++}.${imgURL.slice(-3)}`));
+        response.pipe(fs.createWriteStream('images/'+ `${i++}.${imgURL.slice(-3)}`));
       });
     });
   } catch (error) {
